@@ -13,7 +13,7 @@ const UPSTASH_TOKEN        = process.env.UPSTASH_REDIS_REST_TOKEN; // only env v
 
 const UPSTREAM_BASE        = "https://pw.deltaverse.site/api/get-video-url";
 const CDN_REGEX            = /^https?:\/\/[^/]+\.b-cdn\.net(\/.*)?$/;
-const CDN_REPLACEMENT_HOST = "d2kh8g0i619t1c.cloudfront.net";
+const CDN_REPLACEMENT_HOST = "d3siu11g9khett.cloudfront.net";
 
 const UPSTREAM_USER_AGENT  =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
