@@ -18,6 +18,12 @@ const CDN_REPLACEMENT_HOST = "d2kh8g0i619t1c.cloudfront.net";
 const UPSTREAM_USER_AGENT  =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
 
+const STATIC_COOKIES = [
+  "dv=8a9cf7c9-6542-4ce5-90ac-d47966e26794",
+  "accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWI1NjMxZDRiMzE3ZjEyNjk1ZWQyMDQiLCJuYW1lIjoiRGVsdGFWZXJzZSBVc2VyIDUwMTM3NzM0IiwidGVsZWdyYW1JZCI6bnVsbCwiUGhvdG9VcmwiOm51bGwsImlzR3Vlc3QiOnRydWUsImRldmljZUlkIjoiTW96aWxsYS81LjAgKFdpbmRvd3MgTlQgMTAuMDsgV2luNjQ7IHg2NCkgQXBwbGVXZWIiLCJpcCI6IjEwMy42Mi45Mi4yMzUiLCJpYXQiOjE3OTAyNzIyODYsImV4cCI6MTc5MTU2ODI4Nn0.rZPGiCcjulSESYkzGQDZ5D5i6pPTTZGlpe_lK5jtanM",
+  "refreshToken=77284432fabd91fe43ac77e4b58f521fce6479ed0e531d4efe13d7de3fbcddbf",
+];
+
 const KEYS_FILE = path.join(__dirname, "keys.txt");
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -102,8 +108,9 @@ async function getCookieFromRedis() {
   }
   const session = JSON.parse(body.result);
   const cookieLines = session.cookies.split("\n").map((l) => l.trim()).filter(Boolean);
-  const cookiePairs = cookieLines.map((line) => line.split(";")[0].trim());
-  return cookiePairs.join("; ");
+  const redisPairs = cookieLines.map((line) => line.split(";")[0].trim());
+  // Merge: static cookies first, then dynamic cookies from Redis
+  return [...STATIC_COOKIES, ...redisPairs].join("; ");
 }
 
 /** Rewrite b-cdn.net URLs to CloudFront */
