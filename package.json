@@ -1,0 +1,12 @@
+{
+  "name": "deltaverse-proxy",
+  "version": "1.0.0",
+  "description": "Lightweight proxy for Deltaverse video URLs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
