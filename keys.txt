@@ -1,0 +1,7 @@
+# Keys file — one per line: keyvalue=true/false
+# true  = active, access granted
+# false = expired, access denied
+# Lines starting with # are ignored
+
+temp-xyz=true
+oldKey456=false
