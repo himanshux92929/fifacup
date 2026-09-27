@@ -330,7 +330,7 @@ async function handleVideoUrlX(reqUrl, res) {
   const keyParam  = params.get("key");
   const batchId   = params.get("batchId");
   const subjectId = params.get("subjectId");
-  const videoId   = params.get("videoId");
+  const childId   = params.get("childId");
 
   // 0. Key check
   const auth = checkKey(keyParam);
@@ -340,19 +340,20 @@ async function handleVideoUrlX(reqUrl, res) {
   }
 
   // 1. Validate required params
-  if (!batchId || !subjectId || !videoId) {
+  if (!batchId || !subjectId || !childId) {
     res.writeHead(400, { "Content-Type": "application/json" });
     return res.end(JSON.stringify({
-      error:    "Missing required parameters: batchId, subjectId, videoId",
+      error:    "Missing required parameters: batchId, subjectId, childId",
       error_id: "MISSING_PARAMS",
     }));
   }
 
   // 2. Build vidcloud URL (typeId and video_type are constant)
+  //    childId from caller maps to video_id in the vidcloud URL
   const vidcloudUrl = new url.URL(VIDCLOUD_BASE);
   vidcloudUrl.searchParams.set("batch_id",   batchId);
   vidcloudUrl.searchParams.set("subject_id", subjectId);
-  vidcloudUrl.searchParams.set("video_id",   videoId);
+  vidcloudUrl.searchParams.set("video_id",   childId);
   vidcloudUrl.searchParams.set("typeId",     VIDCLOUD_TYPE_ID);
   vidcloudUrl.searchParams.set("video_type", VIDCLOUD_VIDEO_TYPE);
 
@@ -400,15 +401,15 @@ async function handleVideoUrlX(reqUrl, res) {
   const inputs = parseHiddenInputs(html);
   const parsed = buildResultFromInputs(inputs);
 
-  const timeTakenMs = Date.now() - t0;
+  const timeTakenSec = ((Date.now() - t0) / 1000).toFixed(3) + " s";
 
   // 6. Return final JSON
   const responseObj = {
     ...parsed,
-    time_taken_ms: timeTakenMs,
+    time_taken: timeTakenSec,
   };
 
-  console.log(`[video-urlx] Done in ${timeTakenMs}ms — fields: ${Object.keys(parsed).join(", ")}`);
+  console.log(`[video-urlx] Done in ${timeTakenSec} — fields: ${Object.keys(parsed).join(", ")}`);
 
   res.writeHead(200, { "Content-Type": "application/json", "Cache-Control": "no-store" });
   res.end(JSON.stringify(responseObj));
