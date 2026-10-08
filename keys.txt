@@ -3,7 +3,5 @@
 # false = expired, access denied
 # Lines starting with # are ignored
 
-temp-dev=true
-temp-next=true
 perm-access=true
 oldKey456=false
