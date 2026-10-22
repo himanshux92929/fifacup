@@ -287,6 +287,7 @@ async function handleVideoUrl(reqUrl, res) {
       headers: {
         Accept:       "application/json",
         "User-Agent": UPSTREAM_USER_AGENT,
+        Referer:      "https://pw.deltaverse.site/watch",
         Cookie:       cookie,
       },
     });
